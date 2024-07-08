@@ -29,31 +29,28 @@ class _TodoViewState extends State<TodoView> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(12.0),
-          child: ResponsiveScreen.isSmallScreen(context)
-              ? todos.isNotEmpty
-                  ? Column(
-                      children: todos
-                          .map(
-                            (todo) => TodoItemCard(
-                              todo: todo,
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => TodoFormView(todo: todo),
-                                ),
-                              ),
+          child: todos.isNotEmpty
+              ? Column(
+                  children: todos
+                      .map(
+                        (todo) => TodoItemCard(
+                          todo: todo,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => TodoFormView(todo: todo),
                             ),
-                          )
-                          .toList(),
-                    )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.width,
-                      child: const Center(
-                        child:
-                            Text("Click '+' button to create your first To-Do"),
-                      ),
-                    )
-              : _LargeTodoList(todos: todos),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                )
+              : SizedBox(
+                  height: MediaQuery.of(context).size.width,
+                  child: const Center(
+                    child: Text("Click '+' button to create your first To-Do"),
+                  ),
+                ),
         ),
       ),
       floatingActionButton: CustomFloatingButton(
@@ -65,46 +62,6 @@ class _TodoViewState extends State<TodoView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-  }
-}
-
-class _LargeTodoList extends StatelessWidget {
-  const _LargeTodoList({
-    super.key,
-    required this.todos,
-  });
-
-  final List<Todo> todos;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: GridView.builder(
-        primary: false,
-        padding: const EdgeInsets.all(12.0),
-        itemCount: todos.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6,
-          crossAxisSpacing: 12.0,
-          mainAxisSpacing: 8.0,
-        ),
-        itemBuilder: (context, index) {
-          Todo todo = todos[index];
-
-          return TodoItemCard(
-            todo: todo,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => TodoFormView(todo: todo),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

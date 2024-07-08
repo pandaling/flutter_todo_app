@@ -54,7 +54,9 @@ class _TodoItemCardState extends State<TodoItemCard> {
               onTap: widget.onTap,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 14.0, vertical: 16.0),
+                  horizontal: 14.0,
+                  vertical: 16.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
