@@ -1,30 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_app/features/todo/models/todo_model.dart';
+import 'package:flutter_todo_app/utils/local_storage.dart';
 import 'package:intl/intl.dart';
 
 class TodoController extends ChangeNotifier {
-  final List<Todo> _todos = [];
+  List<Todo> _todos = [];
+
+  final TodoLocalStorage _localStorage = TodoLocalStorage();
 
   List<Todo> get todos => _todos;
 
+  TodoController() {
+    loadData();
+  }
+
   createTodo(Todo todo) {
     _todos.add(todo);
+    _saveData();
 
     notifyListeners();
   }
 
   updateTodo(Todo todo) {
-    int index = todos.indexWhere((_todo) => _todo.id == todo.id);
+    int index = _todos.indexWhere((_todo) => _todo.id == todo.id);
 
     if (index > -1) {
-      todos[index] = Todo(
+      _todos[index] = Todo(
         id: todo.id,
         title: todo.title,
         startDate: todo.startDate,
         endDate: todo.endDate,
       );
+
+      _saveData();
     }
 
+    notifyListeners();
+  }
+
+  deleteTodo(String? id) {
+    _todos.removeWhere((todo) => todo.id == id);
+    _saveData();
     notifyListeners();
   }
 
@@ -61,5 +77,37 @@ class TodoController extends ChangeNotifier {
     }
 
     return '-';
+  }
+
+  Future<void> _saveData() async {
+    await _localStorage.saveTodos(_todos);
+  }
+
+  Future<void> loadData() async {
+    _todos = await _localStorage.loadTodos();
+    notifyListeners();
+  }
+
+  Future<void> _clearData() async {
+    await _localStorage.clearTodos();
+  }
+}
+
+class TodoLocalStorage extends LocalStorage {
+  TodoLocalStorage() : super('todo');
+
+  Future<void> saveTodos(List<Todo> todos) async {
+    final List<Map<String, dynamic>> json =
+        todos.map((todo) => todo.toJson()).toList();
+    await save(json);
+  }
+
+  Future<List<Todo>> loadTodos() async {
+    final List<Map<String, dynamic>> data = await load();
+    return data.map((json) => Todo.fromJson(json)).toList();
+  }
+
+  Future<void> clearTodos() async {
+    await clear();
   }
 }

@@ -60,9 +60,23 @@ class _TodoItemCardState extends State<TodoItemCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.todo?.title ?? '',
-                      style: AppStyle.text14BoldT1,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.todo?.title ?? '',
+                          style: AppStyle.text14BoldT1,
+                        ),
+                        IconButton(
+                          onPressed: () =>
+                              todoController.deleteTodo(widget.todo?.id),
+                          iconSize: 16.0,
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8.0),
                     Row(
