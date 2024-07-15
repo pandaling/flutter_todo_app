@@ -39,10 +39,6 @@ flutter pub get
 flutter test
 ```
 
-1. Clone the repository to your local environment.
-2. Run `flutter pub get` to install the dependencies.
-3. Run the program.
-
 ##### Run the test
 ```shell
 # Run all tests
